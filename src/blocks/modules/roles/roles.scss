@@ -1,0 +1,25 @@
+.roles {
+  margin-block-end: $ind;
+
+  &-heading {
+    &__subtitle {
+      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.75rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: rgb(51 51 51 / 58%);
+    }
+  }
+
+  &-autor {
+    display: flex;
+    gap: $gap;
+
+    &__name {
+      flex-basis: 20%;
+    }
+
+    &__tezis {
+      flex-basis: 80%;
+    }
+  }
+}

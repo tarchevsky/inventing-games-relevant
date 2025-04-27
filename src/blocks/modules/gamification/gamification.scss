@@ -1,0 +1,38 @@
+.gamification {
+  padding-inline: $layout-margin;
+  margin-block-end: $ind;
+  background-color: rgb(51 51 51 / 58%);
+
+  &__whitesheet {
+    background-color: #fff;
+    margin-block: $indmax;
+    padding: $ind $indmax;
+  }
+
+  &-heading {
+    &__subtitle {
+      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.75rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: rgb(51 51 51 / 58%);
+    }
+  }
+
+  &-application {
+    &__row {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  &-forwhat {
+    &__row {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .gamification {
+    padding-inline: 2vw;
+  }
+}

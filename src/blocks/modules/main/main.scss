@@ -1,0 +1,45 @@
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-inline: $layout-margin;
+  height: 100vh;
+  background: url('../img/hands-main.webp') center center/cover no-repeat;
+  color: #fff;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 100;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000A9;
+  }
+
+  &__text {
+    position: relative;
+    z-index: 100;
+    margin-block-end: $ind;
+
+    h1 {
+      color: #fff;
+    }
+  }
+
+  &__specialists {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 100;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    padding-inline: 2vw;
+    height: 50vh;
+  }
+}

@@ -1,0 +1,28 @@
+.gallery {
+  margin-block: $ind;
+
+  &__inner {
+    @include gap;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    a {
+      border: none;
+    }
+
+    img {
+      margin-block: 0;
+    }
+  }
+}
+
+.carousel__button {
+  min-width: revert;
+  margin-block: 0;
+
+  &:hover {
+    background-color: transparent;
+    color: inherit;
+  }
+}

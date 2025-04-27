@@ -1,0 +1,38 @@
+.seminar-video {
+  position: relative;
+  display: block;
+
+  &__video {
+    video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+
+  .plyr {
+    &__poster {
+      background-size: cover;
+    }
+
+    video {
+      object-fit: cover;
+    }
+
+    &__control {
+      min-width: revert;
+    }
+
+    &__controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto auto auto;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .video-presentation {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}

@@ -1,0 +1,14 @@
+extends ../layouts/default
+
+block variables
+    - const title = "Шаблон страницы";
+
+block header
+    include ../../blocks/modules/header/header
+
+block content
+    include ../../blocks/modules/main/main
+
+block scripts
+    //script(src="js/vendor.js")
+    script(src="js/main.js")

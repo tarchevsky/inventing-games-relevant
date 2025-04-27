@@ -1,0 +1,70 @@
+.seminars-main {
+  margin-block-start: -40px;
+
+  .gray-block {
+    margin-block-end: 20px;
+    padding-inline: 17.85vw;
+    background-color: rgba(51, 51, 51, 0.58);
+  }
+
+  .grid-container {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 20px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "text text text "
+    "pic-1 pic-2 pic-3";
+  }
+
+  .big-picture {
+    grid-area: big-picture;
+
+    img {
+      margin: 0;
+      height: 100%;
+    }
+  }
+
+  .pic-1 {
+    grid-area: pic-1;
+
+    img {
+      margin: 0;
+      height: 100%;
+    }
+  }
+
+  .pic-2 {
+    grid-area: pic-2;
+
+    img {
+      margin: 0;
+      height: 100%;
+    }
+  }
+
+  .pic-3 {
+    grid-area: pic-3;
+
+    img {
+      margin: 0;
+      height: 100%;
+    }
+  }
+
+  .text {
+    padding-block: 2vh;
+    padding-inline: 2vw;
+    grid-area: text;
+    color: #fff;
+
+    h2 {
+      color: #fff;
+    }
+
+    a {
+      border-bottom-color: #fff;
+    }
+  }
+}

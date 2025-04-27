@@ -1,0 +1,40 @@
+.seminars-one {
+  margin-block-start: -40px;
+
+  .gray-block {
+    background-color: rgba(51, 51, 51, 0.58);
+  }
+
+  .grid-container {
+    padding-inline: 17.85vw;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "text"
+    "pic";
+  }
+
+  .pic {
+    grid-area: pic;
+
+    img {
+      height: 100%;
+      margin: 0;
+    }
+  }
+
+  .text {
+    padding-block: 2vh;
+    padding-inline: 2vw;
+    grid-area: text;
+    color: #fff;
+
+    h2 {
+      color: #fff;
+    }
+  }
+}

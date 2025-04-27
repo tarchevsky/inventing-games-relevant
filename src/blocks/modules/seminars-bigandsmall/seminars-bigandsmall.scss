@@ -1,0 +1,56 @@
+.seminars-bigandsmall {
+  margin-block-start: -40px;
+
+  .gray-block {
+    background-color: rgba(51, 51, 51, 0.58);
+  }
+
+  .grid-container {
+    padding-inline: 17.85vw;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+    grid-template-areas:
+    "text text text big-picture"
+    "text-mini text-mini text-mini big-picture"
+    "pic pic pic big-picture";
+  }
+
+  .big-picture {
+    grid-area: big-picture;
+
+    img {
+      height: 100%;
+      margin: 0;
+    }
+  }
+
+  .pic {
+    grid-area: pic;
+
+    img {
+      height: 100%;
+      margin: 0;
+    }
+  }
+
+  .text {
+    padding-block: 2vh;
+    padding-inline: 2vw;
+    grid-area: text;
+    color: #fff;
+
+    h2 {
+      color: #fff;
+    }
+
+    &-mini {
+      padding-block: 2vh;
+      padding-inline: 2vw;
+
+      grid-area: text-mini;
+    }
+  }
+}

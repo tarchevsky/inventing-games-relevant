@@ -1,0 +1,9 @@
+mixin sprite(name, href)
+    svg(class=name)
+        use(xlink:href=href)
+
+mixin quote(blockquote, name)
+    .quote
+        blockquote= blockquote
+        .quote__name
+            p= name

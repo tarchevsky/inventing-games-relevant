@@ -1,0 +1,56 @@
+.button {
+  display: inline-block;
+  border: none;
+  border-radius: 50px;
+  padding: $ind $ind;
+  transition: all 0.3s ease-out;
+  appearance: none;
+  cursor: pointer;
+  background-color: #fff;
+  color: #333;
+  font-weight: inherit;
+  margin-block: $ind $ind;
+  white-space: nowrap;
+
+  &__wrapper {
+    max-width: 300px;
+  }
+
+  &:hover {
+    color: $base-color;
+    background-color: $hover-color;
+    border-color: $accent-color;
+  }
+
+  &:active {
+    background-color: $active-color;
+    border-color: transparent;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgb(0 170 252 / 52%);
+    outline: none;
+
+    &:hover {
+      background-color: $active-color;
+      color: #fff;
+      border-color: transparent;
+    }
+  }
+
+  &.active {
+    border-color: transparent;
+    background-color: $active-color;
+    color: #fff;
+
+    &:hover {
+      background-color: #0c9ade;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  button {
+    min-width: 100%;
+  }
+}

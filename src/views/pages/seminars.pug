@@ -1,0 +1,29 @@
+extends ../layouts/seminars
+
+block variables
+    - const title = "Семинары";
+
+block header
+    include ../../blocks/modules/header-alt/header-alt
+    include ../../blocks/modules/seminars/seminars
+    include ../../blocks/modules/seminars-main/seminars-main
+    include ../../blocks/modules/seminars-part-one/seminars-part-one
+
+block content
+    include ../../blocks/modules/seminars-part-two/seminars-part-two
+    include ../../blocks/modules/seminars-part-three/seminars-part-three
+    include ../../blocks/modules/seminars-part-four/seminars-part-four
+    include ../../blocks/modules/seminars-part-five/seminars-part-five
+    include ../../blocks/modules/seminars-part-six/seminars-part-six
+    include ../../blocks/modules/seminars-part-seven/seminars-part-seven
+    include ../../blocks/modules/seminars-double/seminars-double
+    include ../../blocks/modules/seminars-double-two/seminars-double-two
+    include ../../blocks/modules/seminars-one/seminars-one
+    include ../../blocks/modules/seminars-double-three/seminars-double-three
+    include ../../blocks/modules/seminars-triple-four/seminars-triple-four
+    include ../../blocks/modules/seminars-triple-five/seminars-triple-five
+    include ../../blocks/modules/seminars-bigandsmall/seminars-bigandsmall
+
+block scripts
+    script(src="js/vendor.js")
+    script(src="js/main.js")

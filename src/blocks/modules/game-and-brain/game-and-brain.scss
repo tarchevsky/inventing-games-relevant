@@ -1,0 +1,109 @@
+.game-and-brain {
+  margin-block-end: $ind;
+
+  &-with-bg {
+    display: inline-block;
+    position: relative;
+    min-height: 600px;
+    margin-block-end: $ind;
+    padding-inline: 17.85vw;
+    color: $white;
+    background: url('../img/brain-bg.webp') center center/cover no-repeat;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: 100;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000a9;
+    }
+  }
+
+  &-heading {
+    display: inline-block;
+    position: relative;
+    z-index: 200;
+    margin-block-end: $indmax;
+
+    &__title {
+      color: $white;
+    }
+
+    &__subtitle {
+      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.75rem);
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+  }
+
+  &-quotes {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 200;
+    gap: $gap;
+    margin-block-end: $ind;
+    font-family: 'Playfair Display', serif;
+    font-weight: 300;
+    font-size: clamp(1rem, 2.1vw + 0.1rem, 1.4rem);
+    letter-spacing: 1.5px;
+
+    &__space {
+      text-align: center;
+      margin-block-start: -$ind;
+      margin-block-end: -$ind;
+    }
+  }
+
+  &-content {
+    &__img {
+      img {
+        height: 518px;
+        object-position: center;
+      }
+    }
+
+    &__subheading {
+      margin-block-end: $ind;
+      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.75rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: rgba(51, 51, 51, 0.58);
+    }
+
+    &__text {
+      font-family: 'Playfair Display', serif;
+
+      ol {
+        list-style-type: none;
+        counter-reset: num;
+        padding-inline-start: 0;
+
+        li {
+          padding-inline-start: $indmin;
+
+          &::before {
+            content: '0' counter(num) '.';
+            counter-increment: num;
+            width: auto;
+            height: revert;
+            inset-inline-start: -10px;
+            inset-block-start: revert;
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .game-and-brain {
+    &-width-bg {
+      padding-inline: 2vw;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.why {
+  display: flex;
+  flex-direction: column;
+  gap: $gapmax 0;
+  margin-block-end: $ind;
+
+  &-heading {
+    &__subtitle {
+      font-size: clamp(1.2rem, 1.5vw + 0.8rem, 1.75rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: rgb(51 51 51 / 58%);
+    }
+  }
+
+  &__row {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0 $gap;
+  }
+
+  &-game {
+    width: 100%;
+
+    img {
+      height: 518px;
+    }
+  }
+}

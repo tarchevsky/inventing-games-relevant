@@ -1,0 +1,44 @@
+extends layouts/default
+
+block variables
+    - const title = "Изобретая игры"
+    - const description = "Сайт-лонгрид практикующих нейропсихологов и авторов игр Рахмани Марии и Ульяновой Анастасии. Рассказываем об играх и пособиях по детской нейропсихологии"
+    - const keywords = "ключевые, слова, можно словосочетаниями, короткими ёмкими фразами, нужно для поисковых систем, но едва ли, но пусть будет"
+
+block header
+    include ../blocks/modules/header/header
+
+block content
+    include ../blocks/modules/main/main
+    include ../blocks/modules/how-its-done/how-its-done
+    include ../blocks/modules/our-games/our-games
+    include ../blocks/modules/why/why
+    include ../blocks/modules/seminars/seminars
+    include ../blocks/modules/seminar-video/seminar-video
+    include ../blocks/modules/allows/allows
+    include ../blocks/modules/manuals/manuals
+    include ../blocks/modules/what-to-play/what-to-play
+    include ../blocks/modules/gamification/gamification
+    +quote("Мы не прекращаем играть, потому что мы стареем; мы стареем, потому что перестаем играть", "Бернард Шоу")
+    include ../blocks/modules/principles/principles
+    include ../blocks/modules/roles/roles
+    include ../blocks/modules/creativity/creativity
+    +quote("Без поддержания определенного игрового поведения культура вообще невозможна", "Йохан Хёйзинга")
+    include ../blocks/modules/game-and-brain/game-and-brain
+    include ../blocks/modules/how-to-learn/how-to-learn
+    include ../blocks/modules/act-playing/act-playing
+    +quote("Гений игры в том, что в ее процессе мы создаем новые изобретательные когнитивные комбинации. И создавая эти комбинации, узнаем, какие из них работают", "Стюарт Браун")
+    include ../blocks/modules/emotions/emotions
+    include ../blocks/modules/mechanics/mechanics
+    include ../blocks/modules/play/play
+    include ../blocks/modules/bream/bream
+    include ../blocks/modules/contact/contact
+
+block modal
+    include ../blocks/components/modal/modal
+
+block scripts
+    // script(type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js")
+    // script(nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js")
+    script(src="js/vendor.js")
+    script(src="js/main.js")

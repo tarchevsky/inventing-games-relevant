@@ -1,0 +1,25 @@
+.emotions {
+  padding-inline: $layout-margin;
+  margin-block-end: $ind;
+  background-color: rgb(51 51 51 / 58%);
+
+  &__whitesheet {
+    background-color: #fff;
+    margin-block: $indmax;
+    padding: $ind $indmax;
+  }
+
+  &-content {
+    &__img {
+      img {
+        height: 516px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .emotions {
+    padding-inline: 2vw;
+  }
+}
