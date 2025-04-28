@@ -150,6 +150,74 @@ var seminarsMob = new swiper__WEBPACK_IMPORTED_MODULE_0__["default"](".seminars-
 
 /***/ }),
 
+/***/ "./src/blocks/modules/video-slider/video-slider.js":
+/*!*********************************************************!*\
+  !*** ./src/blocks/modules/video-slider/video-slider.js ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! plyr */ "./node_modules/plyr/dist/plyr.min.js");
+/* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(plyr__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var swiper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! swiper */ "./node_modules/swiper/swiper.esm.js");
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Инициализация слайдера с видео
+  var videoSlider = new swiper__WEBPACK_IMPORTED_MODULE_1__["default"]('#video-slider', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: false,
+    speed: 500,
+    modules: [swiper__WEBPACK_IMPORTED_MODULE_1__.Navigation, swiper__WEBPACK_IMPORTED_MODULE_1__.Pagination, swiper__WEBPACK_IMPORTED_MODULE_1__.Mousewheel],
+    pagination: {
+      el: '.video-slider-pagination',
+      clickable: true
+    },
+    navigation: {
+      nextEl: '.video-slider-button-next',
+      prevEl: '.video-slider-button-prev'
+    },
+    mousewheel: {
+      invert: false
+    },
+    breakpoints: {
+      576: {
+        slidesPerView: 1
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 30
+      }
+    },
+    on: {
+      // Приостановить все видео при переключении слайдов
+      slideChange: function slideChange() {
+        document.querySelectorAll('.video-player').forEach(function (video) {
+          if (video.plyr) {
+            video.plyr.pause();
+          }
+        });
+      }
+    }
+  }); // Инициализация Plyr для всех видео в слайдере
+
+  var videoPlayers = Array.from(document.querySelectorAll('.video-player')).map(function (player) {
+    return new (plyr__WEBPACK_IMPORTED_MODULE_0___default())(player, {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+      ratio: '16:9'
+    });
+  });
+});
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+
 /***/ "./src/js/import/components.js":
 /*!*************************************!*\
   !*** ./src/js/import/components.js ***!
@@ -196,8 +264,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_header_header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! %modules%/header/header */ "./src/blocks/modules/header/header.js");
 /* harmony import */ var _modules_header_header__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_modules_header_header__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _modules_seminars_seminars__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! %modules%/seminars/seminars */ "./src/blocks/modules/seminars/seminars.js");
-/* harmony import */ var _modules_seminar_video_seminar_video__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! %modules%/seminar-video/seminar-video */ "./src/blocks/modules/seminar-video/seminar-video.js");
+/* harmony import */ var _modules_seminar_video_seminar_video__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! %modules%/seminar-video/seminar-video */ "./src/blocks/modules/seminar-video/seminar-video.js");
+/* harmony import */ var _modules_seminars_seminars__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! %modules%/seminars/seminars */ "./src/blocks/modules/seminars/seminars.js");
+/* harmony import */ var _modules_video_slider_video_slider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! %modules%/video-slider/video-slider */ "./src/blocks/modules/video-slider/video-slider.js");
+
 
 
 
