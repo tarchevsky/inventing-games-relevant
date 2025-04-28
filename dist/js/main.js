@@ -182,6 +182,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function isMobile() {
     return window.innerWidth <= 768;
+  } // Функция для проверки на Safari
+
+
+  function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  } // Функция для проверки на мобильный Safari
+
+
+  function isMobileSafari() {
+    var isSafariBrowser = isSafari();
+    var isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    return isSafariBrowser && isMobileDevice;
+  } // Функция для ручного исправления Safari проблем с воспроизведением
+
+
+  function applySafariVideoFixes() {
+    if (!isMobileSafari()) return; // Применим хаки для Safari
+
+    document.querySelectorAll('.plyr').forEach(function (plyrContainer) {
+      // Добавляем обработчик для фикса растянутых кнопок в Safari
+      var playButton = plyrContainer.querySelector('.plyr__control--overlaid');
+
+      if (playButton) {
+        // Ограничиваем размер кнопки
+        playButton.style.width = '60px';
+        playButton.style.height = '60px';
+        playButton.style.minWidth = '60px';
+        playButton.style.maxWidth = '60px'; // Добавляем обработчик клика
+
+        playButton.addEventListener('click', function (event) {
+          event.stopPropagation(); // Находим видео элемент
+
+          var videoElement = plyrContainer.querySelector('video');
+
+          if (videoElement) {
+            if (videoElement.paused) {
+              videoElement.play();
+            } else {
+              videoElement.pause();
+            }
+          }
+        });
+      } // Добавляем обработчик клика на весь контейнер для остановки видео
+
+
+      plyrContainer.addEventListener('click', function (event) {
+        // Убедимся, что клик не был на кнопке управления
+        if (!event.target.closest('.plyr__controls') && !event.target.closest('.plyr__control--overlaid')) {
+          var videoElement = plyrContainer.querySelector('video');
+
+          if (videoElement && !videoElement.paused) {
+            videoElement.pause();
+          }
+        }
+      });
+    });
   } // Функция для инициализации всех плееров Plyr
 
 
@@ -203,11 +259,18 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
         videoPlayers = [];
-      } // Создаем новые экземпляры плееров для всех видео
+      } // Проверка на Safari
+
+
+      var _isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+      var isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      var _isMobileSafari = _isSafari && isMobileDevice; // Создаем новые экземпляры плееров для всех видео
 
 
       videoPlayers = Array.from(playerElements).map(function (player) {
-        return new (plyr__WEBPACK_IMPORTED_MODULE_0___default())(player, {
+        var plyrInstance = new (plyr__WEBPACK_IMPORTED_MODULE_0___default())(player, {
           controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
           ratio: isMobile() ? 'auto' : '16:9',
           responsive: true,
@@ -215,7 +278,56 @@ document.addEventListener('DOMContentLoaded', function () {
           disableContextMenu: false,
           autoplay: false // Отключаем автоплей, чтобы избежать проблем
 
-        });
+        }); // Дополнительная обработка событий для Safari
+
+        if (_isMobileSafari) {
+          // Обработчик нажатия на кнопку воспроизведения
+          var handlePlayButtonClick = function handlePlayButtonClick(event) {
+            // Предотвращаем конфликт событий
+            event.stopPropagation(); // Если видео воспроизводится, останавливаем его
+
+            if (!plyrInstance.paused) {
+              plyrInstance.pause();
+              return;
+            } // Если видео остановлено, запускаем его
+
+
+            plyrInstance.play();
+          }; // Когда плеер готов, добавляем обработчики
+
+
+          plyrInstance.on('ready', function () {
+            var playButton = plyrInstance.elements.container.querySelector('.plyr__control--overlaid');
+
+            if (playButton) {
+              // Удаляем старые обработчики, чтобы избежать дублирования
+              playButton.removeEventListener('click', handlePlayButtonClick); // Добавляем новый обработчик
+
+              playButton.addEventListener('click', handlePlayButtonClick);
+            } // Добавляем обработчик для быстрой остановки через прозрачную область
+
+
+            var handleContainerClick = function handleContainerClick() {
+              if (!plyrInstance.paused) {
+                plyrInstance.pause();
+              }
+            }; // Добавляем обработчик на весь контейнер плеера для Safari
+
+
+            plyrInstance.elements.container.addEventListener('click', handleContainerClick);
+          }); // Отдельная обработка состояния воспроизведения для Safari
+
+          plyrInstance.on('play', function () {
+            // Добавляем класс для быстрого доступа через CSS
+            plyrInstance.elements.container.classList.add('is-playing-safari');
+          });
+          plyrInstance.on('pause', function () {
+            // Удаляем класс при остановке
+            plyrInstance.elements.container.classList.remove('is-playing-safari');
+          });
+        }
+
+        return plyrInstance;
       });
       return videoPlayers.length > 0;
     } catch (error) {
@@ -296,7 +408,9 @@ document.addEventListener('DOMContentLoaded', function () {
   } // Инициализируем все плееры перед инициализацией слайдера
 
 
-  var plyrInitialized = initAllPlayers(); // Добавляем небольшую задержку перед инициализацией слайдера
+  var plyrInitialized = initAllPlayers(); // Применяем Safari-специфичные исправления
+
+  setTimeout(applySafariVideoFixes, 300); // Добавляем небольшую задержку перед инициализацией слайдера
 
   setTimeout(function () {
     // Инициализация слайдера с видео
@@ -351,12 +465,17 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Повторная инициализация плееров');
             initAllPlayers();
             setTimeout(setupActiveSlides, 100);
-          }
+          } // Применяем Safari-специфичные исправления
+
+
+          setTimeout(applySafariVideoFixes, 200);
         },
         // При изменении размера
         resize: function resize() {
           updatePlyrInstancesSize();
-          setupActiveSlides();
+          setupActiveSlides(); // Применяем Safari-специфичные исправления при изменении размера
+
+          applySafariVideoFixes();
         }
       }
     }); // Дополнительно настраиваем плееры после небольшой задержки
