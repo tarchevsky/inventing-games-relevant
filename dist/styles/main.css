@@ -3568,6 +3568,7 @@ aside {
 
 .video-slider-wrapper {
   margin-bottom: 20px;
+  overflow: hidden;
 }
 
 .video-slider-slide video {
@@ -3575,6 +3576,8 @@ aside {
   height: auto;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  object-fit: cover;
 }
 
 .video-slider-pagination {
@@ -3590,6 +3593,7 @@ aside {
   height: 50px;
   margin: 0 auto;
   padding-top: 15px;
+  width: 100%;
 }
 
 .video-slider .swiper-button-next,
@@ -3602,6 +3606,7 @@ aside {
   transform: translateY(-50%);
   border-radius: 50%;
   background-color: #f5f5f5;
+  z-index: 10;
 }
 
 .video-slider .swiper-button-next:after,
@@ -3616,11 +3621,11 @@ aside {
 }
 
 .video-slider .swiper-button-next {
-  right: 0;
+  right: 10px;
 }
 
 .video-slider .swiper-button-prev {
-  left: 0;
+  left: 10px;
 }
 
 img {
@@ -4286,6 +4291,10 @@ input[type=range]:focus {
     height: 40vh;
   }
 
+  .quote blockquote::before {
+    inset-inline-start: 0px;
+  }
+
   .principles {
     padding-inline: 2vw;
   }
@@ -4359,22 +4368,38 @@ input[type=range]:focus {
 
 @media (max-width: 768px) {
   .video-slider-wrapper {
-    padding: 0 40px;
+    padding: 0 5px;
   }
 
   .video-slider-navigation {
-    max-width: 90%;
+    max-width: 100%;
+    padding: 0 40px;
   }
 
   .video-slider .swiper-button-next,
   .video-slider .swiper-button-prev {
     width: 32px;
     height: 32px;
+    top: 50%;
   }
 
   .video-slider .swiper-button-next:after,
   .video-slider .swiper-button-prev:after {
     font-size: 14px;
+  }
+
+  .video-slider .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+  }
+
+  .video-slider .plyr {
+    max-width: 100%;
+  }
+
+  .video-slider .plyr__video-wrapper {
+    height: auto !important;
   }
 }
 
@@ -4387,6 +4412,17 @@ input[type=range]:focus {
   .video-presentation {
     display: flex;
     flex-direction: column-reverse;
+  }
+}
+
+@media (max-width: 576px) {
+  .video-slider .plyr {
+    height: auto !important;
+  }
+
+  .video-slider .plyr video {
+    height: auto !important;
+    object-fit: contain !important;
   }
 }
 
