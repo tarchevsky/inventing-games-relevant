@@ -10,6 +10,65 @@ document.addEventListener('DOMContentLoaded', () => {
 		return window.innerWidth <= 768
 	}
 
+	// Функция для проверки на Safari
+	function isSafari() {
+		return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+	}
+
+	// Функция для проверки на мобильный Safari
+	function isMobileSafari() {
+		const isSafariBrowser = isSafari()
+		const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+		return isSafariBrowser && isMobileDevice
+	}
+
+	// Функция для ручного исправления Safari проблем с воспроизведением
+	function applySafariVideoFixes() {
+		if (!isMobileSafari()) return
+
+		// Применим хаки для Safari
+		document.querySelectorAll('.plyr').forEach(plyrContainer => {
+			// Добавляем обработчик для фикса растянутых кнопок в Safari
+			const playButton = plyrContainer.querySelector('.plyr__control--overlaid')
+			if (playButton) {
+				// Ограничиваем размер кнопки
+				playButton.style.width = '60px'
+				playButton.style.height = '60px'
+				playButton.style.minWidth = '60px'
+				playButton.style.maxWidth = '60px'
+
+				// Добавляем обработчик клика
+				playButton.addEventListener('click', event => {
+					event.stopPropagation()
+
+					// Находим видео элемент
+					const videoElement = plyrContainer.querySelector('video')
+					if (videoElement) {
+						if (videoElement.paused) {
+							videoElement.play()
+						} else {
+							videoElement.pause()
+						}
+					}
+				})
+			}
+
+			// Добавляем обработчик клика на весь контейнер для остановки видео
+			plyrContainer.addEventListener('click', event => {
+				// Убедимся, что клик не был на кнопке управления
+				if (
+					!event.target.closest('.plyr__controls') &&
+					!event.target.closest('.plyr__control--overlaid')
+				) {
+					const videoElement = plyrContainer.querySelector('video')
+					if (videoElement && !videoElement.paused) {
+						videoElement.pause()
+					}
+				}
+			})
+		})
+	}
+
 	// Функция для инициализации всех плееров Plyr
 	function initAllPlayers() {
 		try {
@@ -31,9 +90,18 @@ document.addEventListener('DOMContentLoaded', () => {
 				videoPlayers = []
 			}
 
+			// Проверка на Safari
+			const isSafari = /^((?!chrome|android).)*safari/i.test(
+				navigator.userAgent
+			)
+			const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(
+				navigator.userAgent
+			)
+			const isMobileSafari = isSafari && isMobileDevice
+
 			// Создаем новые экземпляры плееров для всех видео
 			videoPlayers = Array.from(playerElements).map(player => {
-				return new Plyr(player, {
+				const plyrInstance = new Plyr(player, {
 					controls: [
 						'play-large',
 						'play',
@@ -49,6 +117,65 @@ document.addEventListener('DOMContentLoaded', () => {
 					disableContextMenu: false,
 					autoplay: false, // Отключаем автоплей, чтобы избежать проблем
 				})
+
+				// Дополнительная обработка событий для Safari
+				if (isMobileSafari) {
+					// Обработчик нажатия на кнопку воспроизведения
+					const handlePlayButtonClick = event => {
+						// Предотвращаем конфликт событий
+						event.stopPropagation()
+
+						// Если видео воспроизводится, останавливаем его
+						if (!plyrInstance.paused) {
+							plyrInstance.pause()
+							return
+						}
+
+						// Если видео остановлено, запускаем его
+						plyrInstance.play()
+					}
+
+					// Когда плеер готов, добавляем обработчики
+					plyrInstance.on('ready', () => {
+						const playButton = plyrInstance.elements.container.querySelector(
+							'.plyr__control--overlaid'
+						)
+						if (playButton) {
+							// Удаляем старые обработчики, чтобы избежать дублирования
+							playButton.removeEventListener('click', handlePlayButtonClick)
+							// Добавляем новый обработчик
+							playButton.addEventListener('click', handlePlayButtonClick)
+						}
+
+						// Добавляем обработчик для быстрой остановки через прозрачную область
+						const handleContainerClick = () => {
+							if (!plyrInstance.paused) {
+								plyrInstance.pause()
+							}
+						}
+
+						// Добавляем обработчик на весь контейнер плеера для Safari
+						plyrInstance.elements.container.addEventListener(
+							'click',
+							handleContainerClick
+						)
+					})
+
+					// Отдельная обработка состояния воспроизведения для Safari
+					plyrInstance.on('play', () => {
+						// Добавляем класс для быстрого доступа через CSS
+						plyrInstance.elements.container.classList.add('is-playing-safari')
+					})
+
+					plyrInstance.on('pause', () => {
+						// Удаляем класс при остановке
+						plyrInstance.elements.container.classList.remove(
+							'is-playing-safari'
+						)
+					})
+				}
+
+				return plyrInstance
 			})
 
 			return videoPlayers.length > 0
@@ -140,6 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	// Инициализируем все плееры перед инициализацией слайдера
 	const plyrInitialized = initAllPlayers()
 
+	// Применяем Safari-специфичные исправления
+	setTimeout(applySafariVideoFixes, 300)
+
 	// Добавляем небольшую задержку перед инициализацией слайдера
 	setTimeout(() => {
 		// Инициализация слайдера с видео
@@ -198,11 +328,17 @@ document.addEventListener('DOMContentLoaded', () => {
 						initAllPlayers()
 						setTimeout(setupActiveSlides, 100)
 					}
+
+					// Применяем Safari-специфичные исправления
+					setTimeout(applySafariVideoFixes, 200)
 				},
 				// При изменении размера
 				resize: () => {
 					updatePlyrInstancesSize()
 					setupActiveSlides()
+
+					// Применяем Safari-специфичные исправления при изменении размера
+					applySafariVideoFixes()
 				},
 			},
 		})

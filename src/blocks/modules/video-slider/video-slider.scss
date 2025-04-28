@@ -110,6 +110,95 @@
 				height: auto !important;
 				object-fit: contain !important;
 			}
+
+			// Исправление для кнопки воспроизведения в Safari
+			&__control--overlaid {
+				width: 60px !important;
+				height: 60px !important;
+				padding: 0 !important;
+				box-sizing: border-box !important;
+				border-radius: 50% !important;
+				position: absolute !important;
+				top: 50% !important;
+				left: 50% !important;
+				transform: translate(-50%, -50%) !important;
+				pointer-events: auto !important;
+
+				// Правило для Safari
+				@supports (-webkit-touch-callout: none) {
+					width: 60px !important;
+					height: 60px !important;
+					min-width: 60px !important;
+					max-width: 60px !important;
+					min-height: 60px !important;
+					max-height: 60px !important;
+				}
+			}
+
+			// Исправление для кнопки паузы при воспроизведении
+			&--playing .plyr__control--overlaid {
+				opacity: 0;
+				pointer-events: none;
+
+				&:hover {
+					opacity: 1;
+					pointer-events: auto;
+				}
+			}
+
+			// Обеспечение кликабельности всех кнопок управления
+			&__controls {
+				pointer-events: auto !important;
+			}
+		}
+
+		// Специальный класс для Safari при воспроизведении
+		.is-playing-safari {
+			.plyr__control--overlaid {
+				opacity: 0;
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+
+			// Добавляем дополнительную прозрачную кнопку для остановки видео
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 3;
+				cursor: pointer;
+			}
+
+			// Проверяем, что элементы управления остаются на верхнем слое
+			.plyr__controls {
+				z-index: 4;
+				position: relative;
+			}
+		}
+	}
+
+	// Специфические стили для Safari
+	@media not all and (min-resolution: 0.001dpcm) {
+		@supports (-webkit-appearance: none) {
+			@media (max-width: 576px) {
+				.plyr__control--overlaid {
+					width: 60px !important;
+					height: 60px !important;
+					min-width: 60px !important;
+					max-width: 60px !important;
+					min-height: 60px !important;
+					max-height: 60px !important;
+					padding: 0 !important;
+					display: flex !important;
+					align-items: center !important;
+					justify-content: center !important;
+				}
+			}
 		}
 	}
 }
