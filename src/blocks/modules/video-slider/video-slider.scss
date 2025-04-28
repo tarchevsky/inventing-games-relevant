@@ -4,6 +4,7 @@
 
 	&-wrapper {
 		margin-bottom: 20px;
+		overflow: hidden;
 	}
 
 	&-slide {
@@ -12,6 +13,8 @@
 			height: auto;
 			border-radius: 8px;
 			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+			max-width: 100%;
+			object-fit: cover;
 		}
 	}
 
@@ -28,6 +31,7 @@
 		height: 50px;
 		margin: 0 auto;
 		padding-top: 15px;
+		width: 100%;
 	}
 
 	.swiper-button-next,
@@ -40,6 +44,7 @@
 		transform: translateY(-50%);
 		border-radius: 50%;
 		background-color: #f5f5f5;
+		z-index: 10;
 
 		&:after {
 			font-size: 18px;
@@ -52,30 +57,58 @@
 	}
 
 	.swiper-button-next {
-		right: 0;
+		right: 10px;
 	}
 
 	.swiper-button-prev {
-		left: 0;
+		left: 10px;
 	}
 
 	// Адаптивные стили
 	@media (max-width: 768px) {
 		&-wrapper {
-			padding: 0 40px;
+			padding: 0 5px;
 		}
 
 		&-navigation {
-			max-width: 90%;
+			max-width: 100%;
+			padding: 0 40px;
 		}
 
 		.swiper-button-next,
 		.swiper-button-prev {
 			width: 32px;
 			height: 32px;
+			top: 50%;
 
 			&:after {
 				font-size: 14px;
+			}
+		}
+
+		.swiper-pagination-bullet {
+			width: 8px;
+			height: 8px;
+			margin: 0 4px;
+		}
+
+		.plyr {
+			max-width: 100%;
+
+			&__video-wrapper {
+				height: auto !important;
+			}
+		}
+	}
+
+	// Стили для плеера Plyr в мобильной версии
+	@media (max-width: 576px) {
+		.plyr {
+			height: auto !important;
+
+			video {
+				height: auto !important;
+				object-fit: contain !important;
 			}
 		}
 	}

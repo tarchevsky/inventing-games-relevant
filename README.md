@@ -5,6 +5,11 @@ git clone --no-checkout https://github.com/tarchevsky/inventing-games-relevant.g
 ```shell
 # Функция для получения дистрибутива
 gits() {
+  # Проверяем и удаляем директорию temp_repo, если она существует
+  if [ -d "temp_repo" ]; then
+    rm -rf temp_repo
+  fi
+
   git clone --no-checkout https://github.com/tarchevsky/inventing-games-relevant.git temp_repo && \
   cd temp_repo && \
   git sparse-checkout init --cone && \
