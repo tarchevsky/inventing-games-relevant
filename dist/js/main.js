@@ -161,336 +161,57 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! plyr */ "./node_modules/plyr/dist/plyr.min.js");
 /* harmony import */ var plyr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(plyr__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var swiper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! swiper */ "./node_modules/swiper/swiper.esm.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  var videoPlayers = []; // Объявляем переменную сразу
-
-  var videoSlider; // Функция для проверки на мобильные устройства
-
-  function isMobile() {
-    return window.innerWidth <= 768;
-  } // Функция для проверки на Safari
-
-
-  function isSafari() {
-    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  } // Функция для проверки на мобильный Safari
-
-
-  function isMobileSafari() {
-    var isSafariBrowser = isSafari();
-    var isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    return isSafariBrowser && isMobileDevice;
-  } // Функция для ручного исправления Safari проблем с воспроизведением
-
-
-  function applySafariVideoFixes() {
-    if (!isMobileSafari()) return; // Применим хаки для Safari
-
-    document.querySelectorAll('.plyr').forEach(function (plyrContainer) {
-      // Добавляем обработчик для фикса растянутых кнопок в Safari
-      var playButton = plyrContainer.querySelector('.plyr__control--overlaid');
-
-      if (playButton) {
-        // Ограничиваем размер кнопки
-        playButton.style.width = '60px';
-        playButton.style.height = '60px';
-        playButton.style.minWidth = '60px';
-        playButton.style.maxWidth = '60px'; // Добавляем обработчик клика
-
-        playButton.addEventListener('click', function (event) {
-          event.stopPropagation(); // Находим видео элемент
-
-          var videoElement = plyrContainer.querySelector('video');
-
-          if (videoElement) {
-            if (videoElement.paused) {
-              videoElement.play();
-            } else {
-              videoElement.pause();
-            }
+  // Инициализация слайдера с видео
+  var videoSlider = new swiper__WEBPACK_IMPORTED_MODULE_1__["default"]('#video-slider', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: false,
+    speed: 500,
+    modules: [swiper__WEBPACK_IMPORTED_MODULE_1__.Navigation, swiper__WEBPACK_IMPORTED_MODULE_1__.Pagination, swiper__WEBPACK_IMPORTED_MODULE_1__.Mousewheel],
+    pagination: {
+      el: '.video-slider-pagination',
+      clickable: true
+    },
+    navigation: {
+      nextEl: '.video-slider-button-next',
+      prevEl: '.video-slider-button-prev'
+    },
+    mousewheel: {
+      invert: false
+    },
+    breakpoints: {
+      576: {
+        slidesPerView: 1
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 30
+      }
+    },
+    on: {
+      // Приостановить все видео при переключении слайдов
+      slideChange: function slideChange() {
+        document.querySelectorAll('.video-player').forEach(function (video) {
+          if (video.plyr) {
+            video.plyr.pause();
           }
         });
-      } // Добавляем обработчик клика на весь контейнер для остановки видео
-
-
-      plyrContainer.addEventListener('click', function (event) {
-        // Убедимся, что клик не был на кнопке управления
-        if (!event.target.closest('.plyr__controls') && !event.target.closest('.plyr__control--overlaid')) {
-          var videoElement = plyrContainer.querySelector('video');
-
-          if (videoElement && !videoElement.paused) {
-            videoElement.pause();
-          }
-        }
-      });
-    });
-  } // Функция для инициализации всех плееров Plyr
-
-
-  function initAllPlayers() {
-    try {
-      // Сначала инициализируем все видео-плееры, чтобы избежать проблем с первыми слайдами
-      var playerElements = document.querySelectorAll('.video-player');
-
-      if (playerElements.length === 0) {
-        console.error('Видео-плееры не найдены');
-        return false;
-      } // Очищаем предыдущие экземпляры плееров, если они есть
-
-
-      if (videoPlayers.length > 0) {
-        videoPlayers.forEach(function (player) {
-          if (player && typeof player.destroy === 'function') {
-            player.destroy();
-          }
-        });
-        videoPlayers = [];
-      } // Проверка на Safari
-
-
-      var _isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-      var isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      var _isMobileSafari = _isSafari && isMobileDevice; // Создаем новые экземпляры плееров для всех видео
-
-
-      videoPlayers = Array.from(playerElements).map(function (player) {
-        var plyrInstance = new (plyr__WEBPACK_IMPORTED_MODULE_0___default())(player, {
-          controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-          ratio: isMobile() ? 'auto' : '16:9',
-          responsive: true,
-          seekTime: 10,
-          disableContextMenu: false,
-          autoplay: false // Отключаем автоплей, чтобы избежать проблем
-
-        }); // Дополнительная обработка событий для Safari
-
-        if (_isMobileSafari) {
-          // Обработчик нажатия на кнопку воспроизведения
-          var handlePlayButtonClick = function handlePlayButtonClick(event) {
-            // Предотвращаем конфликт событий
-            event.stopPropagation(); // Если видео воспроизводится, останавливаем его
-
-            if (!plyrInstance.paused) {
-              plyrInstance.pause();
-              return;
-            } // Если видео остановлено, запускаем его
-
-
-            plyrInstance.play();
-          }; // Когда плеер готов, добавляем обработчики
-
-
-          plyrInstance.on('ready', function () {
-            var playButton = plyrInstance.elements.container.querySelector('.plyr__control--overlaid');
-
-            if (playButton) {
-              // Удаляем старые обработчики, чтобы избежать дублирования
-              playButton.removeEventListener('click', handlePlayButtonClick); // Добавляем новый обработчик
-
-              playButton.addEventListener('click', handlePlayButtonClick);
-            } // Добавляем обработчик для быстрой остановки через прозрачную область
-
-
-            var handleContainerClick = function handleContainerClick() {
-              if (!plyrInstance.paused) {
-                plyrInstance.pause();
-              }
-            }; // Добавляем обработчик на весь контейнер плеера для Safari
-
-
-            plyrInstance.elements.container.addEventListener('click', handleContainerClick);
-          }); // Отдельная обработка состояния воспроизведения для Safari
-
-          plyrInstance.on('play', function () {
-            // Добавляем класс для быстрого доступа через CSS
-            plyrInstance.elements.container.classList.add('is-playing-safari');
-          });
-          plyrInstance.on('pause', function () {
-            // Удаляем класс при остановке
-            plyrInstance.elements.container.classList.remove('is-playing-safari');
-          });
-        }
-
-        return plyrInstance;
-      });
-      return videoPlayers.length > 0;
-    } catch (error) {
-      console.error('Ошибка инициализации Plyr:', error);
-      return false;
+      }
     }
-  } // Функция для обновления размеров Plyr
+  }); // Инициализация Plyr для всех видео в слайдере
 
-
-  function updatePlyrInstancesSize() {
-    // Проверяем существует ли массив videoPlayers и не пустой ли он
-    if (!videoPlayers || videoPlayers.length === 0) return;
-    videoPlayers.forEach(function (player) {
-      if (player && player.elements && player.elements.container) {
-        // Обновить размер контейнера Plyr
-        if (isMobile()) {
-          player.ratio = 'auto'; // Автоматические пропорции для мобильных
-          // Принудительно выставляем стили для мобильных
-
-          if (player.elements.wrapper) {
-            player.elements.wrapper.style.maxWidth = '100%';
-            player.elements.wrapper.style.height = 'auto';
-          }
-
-          if (player.elements.container) {
-            player.elements.container.style.maxWidth = '100%';
-            player.elements.container.style.width = '100%';
-            player.elements.container.style.height = 'auto';
-          }
-        } else {
-          player.ratio = '16:9'; // Стандартное соотношение для десктопа
-        }
-      }
-    }); // Триггерим ресайз для корректного обновления интерфейса
-
-    window.dispatchEvent(new Event('resize'));
-  } // Функция для применения настроек к активным слайдам
-
-
-  function setupActiveSlides() {
-    // Находим активные и видимые слайды
-    var activeSlides = document.querySelectorAll('.swiper-slide-active .video-player, .swiper-slide-visible .video-player'); // Специальная обработка для первых двух слайдов
-
-    var firstSlides = document.querySelectorAll('.swiper-slide:nth-child(1) .video-player, .swiper-slide:nth-child(2) .video-player'); // Обрабатываем как активные, так и первые слайды
-
-    var slidesToProcess = _toConsumableArray(new Set([].concat(_toConsumableArray(activeSlides), _toConsumableArray(firstSlides))));
-
-    slidesToProcess.forEach(function (videoElement, index) {
-      // Получаем индекс плеера в массиве videoPlayers
-      var playerIndex = Array.from(document.querySelectorAll('.video-player')).indexOf(videoElement);
-
-      if (playerIndex >= 0 && playerIndex < videoPlayers.length) {
-        var player = videoPlayers[playerIndex];
-
-        if (player && player.elements) {
-          // Применяем настройки к плееру
-          if (player.elements.container) {
-            player.elements.container.style.maxWidth = '100%';
-            player.elements.container.style.width = '100%';
-          } // Устанавливаем соотношение сторон
-
-
-          player.ratio = isMobile() ? 'auto' : '16:9'; // Обновляем размеры для первых двух слайдов специальным образом
-
-          if (index < 2) {
-            // Форсируем обновление первых двух слайдов
-            setTimeout(function () {
-              if (player.elements && player.elements.container) {
-                player.elements.container.style.maxWidth = '100%';
-                player.elements.container.style.width = '100%';
-                player.elements.container.style.opacity = '1';
-              }
-            }, 100);
-          }
-        }
-      }
+  var videoPlayers = Array.from(document.querySelectorAll('.video-player')).map(function (player) {
+    return new (plyr__WEBPACK_IMPORTED_MODULE_0___default())(player, {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+      ratio: '16:9'
     });
-  } // Инициализируем все плееры перед инициализацией слайдера
-
-
-  var plyrInitialized = initAllPlayers(); // Применяем Safari-специфичные исправления
-
-  setTimeout(applySafariVideoFixes, 300); // Добавляем небольшую задержку перед инициализацией слайдера
-
-  setTimeout(function () {
-    // Инициализация слайдера с видео
-    videoSlider = new swiper__WEBPACK_IMPORTED_MODULE_1__["default"]('#video-slider', {
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: false,
-      speed: 500,
-      modules: [swiper__WEBPACK_IMPORTED_MODULE_1__.Navigation, swiper__WEBPACK_IMPORTED_MODULE_1__.Pagination, swiper__WEBPACK_IMPORTED_MODULE_1__.Mousewheel],
-      pagination: {
-        el: '.video-slider-pagination',
-        clickable: true
-      },
-      navigation: {
-        nextEl: '.video-slider-button-next',
-        prevEl: '.video-slider-button-prev'
-      },
-      mousewheel: {
-        invert: false
-      },
-      breakpoints: {
-        576: {
-          slidesPerView: 1
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 20
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 30
-        }
-      },
-      on: {
-        // Приостановить все видео при переключении слайдов
-        slideChange: function slideChange() {
-          document.querySelectorAll('.video-player').forEach(function (video) {
-            if (video.plyr) {
-              video.plyr.pause();
-            }
-          });
-        },
-        // После инициализации слайдера
-        init: function init() {
-          console.log('Слайдер инициализирован'); // Форсируем обновление размеров всех плееров
-
-          updatePlyrInstancesSize(); // Настраиваем активные слайды
-
-          setupActiveSlides(); // Если изначальная инициализация не удалась, пробуем еще раз
-
-          if (!plyrInitialized) {
-            console.log('Повторная инициализация плееров');
-            initAllPlayers();
-            setTimeout(setupActiveSlides, 100);
-          } // Применяем Safari-специфичные исправления
-
-
-          setTimeout(applySafariVideoFixes, 200);
-        },
-        // При изменении размера
-        resize: function resize() {
-          updatePlyrInstancesSize();
-          setupActiveSlides(); // Применяем Safari-специфичные исправления при изменении размера
-
-          applySafariVideoFixes();
-        }
-      }
-    }); // Дополнительно настраиваем плееры после небольшой задержки
-
-    setTimeout(function () {
-      setupActiveSlides();
-      updatePlyrInstancesSize();
-    }, 300);
-  }, 100); // Обработчик события изменения размера окна
-
-  window.addEventListener('resize', function () {
-    setTimeout(function () {
-      updatePlyrInstancesSize();
-      setupActiveSlides();
-    }, 300);
   });
 });
 /* harmony default export */ __webpack_exports__["default"] = ({});
